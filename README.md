@@ -18,3 +18,5 @@
 - [14.单隐藏层自编码器](14.single_autoencoder.py)
 - [15.多隐藏层自编码器](15.multi_autoencoder.py)
 - [16.卷积自编码器](16.Convolutional_autoencoder.py)
+- [17.图片去噪处理](17.Image_denoising.py)
+- [18.Glove词向量进行新闻分类](18.GloVe_word_embeddings.py)
