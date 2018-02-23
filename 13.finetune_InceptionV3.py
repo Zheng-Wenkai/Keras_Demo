@@ -1,6 +1,3 @@
-#!!! 训练发生器出现越界 !!!
-
-
 from keras.applications.inception_v3 import InceptionV3, preprocess_input
 from keras.preprocessing import image
 from keras.models import Model
