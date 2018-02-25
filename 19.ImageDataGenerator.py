@@ -45,30 +45,31 @@ datagen = ImageDataGenerator(
     rotation_range=20,
     width_shift_range=0.2,
     height_shift_range=0.2,
-    horizontal_flip=True)
+    horizontal_flip=True,
+    rescale=1./255)
 
 # 计算依赖于数据的变换所需要的统计信息(均值方差等),
 # 只有使用featurewise_center，featurewise_std_normalization或zca_whitening时需要此函数。
 datagen.fit(x_train)
 
-'''接收numpy数组和标签为参数时使用flow'''
+'''fit_generator接收numpy数组和标签为参数时使用flow'''
 model.fit_generator(datagen.flow(x_train, y_train, batch_size=batch_size),
-                    steps_per_epoch=x_train//batch_size+1,
+                    steps_per_epoch=x_train.shape[0]//batch_size+1,
                     validation_data=(x_val,y_val),
                     epochs=nb_epoch)
 
-'''以文件夹路径为参数时使用flow_from_directory'''
+'''fit_generator以文件夹路径为参数时使用flow_from_directory'''
 # train_datagen = ImageDataGenerator(
 #         rescale=1./255,
 #         shear_range=0.2,
 #         zoom_range=0.2,
 #         horizontal_flip=True)
-# val_datagen = ImageDataGenerator(rescale=1./255)
 # train_generator = train_datagen.flow_from_directory(
 #         'data/train',
 #         target_size=(150, 150),
 #         batch_size=32,
 #         class_mode='binary')
+# val_datagen = ImageDataGenerator(rescale=1./255)
 # validation_generator = val_datagen.flow_from_directory(
 #         'data/validation',
 #         target_size=(150, 150),
@@ -76,6 +77,14 @@ model.fit_generator(datagen.flow(x_train, y_train, batch_size=batch_size),
 #         class_mode='binary')
 # model.fit_generator(
 #         train_generator,
-#         steps_per_epoch=x_train//batch_size+1,
+#         steps_per_epoch=x_train.shape[0]//batch_size+1,
 #         epochs=nb_epoch,
 #         validation_data=validation_generator,)
+
+'''evalute_geneator，主要用于评价模型之前对图片做一些处理'''
+val_datagen = ImageDataGenerator(rescale=1./255)
+val_generator = datagen.flow(
+            x_val, y_val,
+            batch_size=batch_size,
+)
+score=model.evaluate_generator(val_generator,steps=x_val.shape[0] // batch_size+1)
